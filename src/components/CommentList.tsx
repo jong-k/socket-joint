@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-function CommentList({ isLoading, data, error }) {
+function CommentList({ isLoading, data, error, removeComment }) {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error on fetching data...</div>;
 
@@ -11,8 +11,20 @@ function CommentList({ isLoading, data, error }) {
       <CreatedAt>{comment.createdAt}</CreatedAt>
       <Content>{comment.content}</Content>
       <Button>
-        <a>수정</a>
-        <a>삭제</a>
+        <a
+          onClick={() => {
+            console.log(comment);
+          }}
+        >
+          수정
+        </a>
+        <a
+          onClick={() => {
+            removeComment(comment);
+          }}
+        >
+          삭제
+        </a>
       </Button>
       <hr />
     </Comment>

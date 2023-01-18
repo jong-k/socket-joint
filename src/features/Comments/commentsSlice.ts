@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchComments } from "./fetchComments";
-import { addComments } from "./addComments";
+import { addComment } from "./addComment";
+import { removeComment } from "./removeComment";
 
 const commentsSlice = createSlice({
   name: "comments",
@@ -25,14 +26,29 @@ const commentsSlice = createSlice({
     });
 
     // 새 댓글 생성
-    builder.addCase(addComments.pending, (state, action) => {
+    builder.addCase(addComment.pending, (state, action) => {
       state.isLoading = true;
     });
-    builder.addCase(addComments.fulfilled, (state, action) => {
+    builder.addCase(addComment.fulfilled, (state, action) => {
       state.isLoading = false;
       state.data.push(action.payload);
     });
-    builder.addCase(addComments.rejected, (state, action) => {
+    builder.addCase(addComment.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    });
+
+    // 댓글 삭제
+    builder.addCase(removeComment.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(removeComment.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.data = state.data.filter((user) => {
+        return user.id !== action.payload.id;
+      });
+    });
+    builder.addCase(removeComment.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.error;
     });

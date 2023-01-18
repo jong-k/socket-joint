@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const addComments = createAsyncThunk("comments/add", async (data) => {
+export const addComment = createAsyncThunk("comments/add", async (data) => {
   const response = await fetch("http://localhost:4000/comments", {
     method: "POST",
     headers: {

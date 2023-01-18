@@ -146,20 +146,6 @@
       "author": "abc_21",
       "content": "typescript도 배워 보려고 합니다. 어떻게 배우는게 빠를까요",
       "createdAt": "2022-03-21"
-    },
-    {
-      "id": 22,
-      "profile_url": "https://picsum.photos/id/22/50/50",
-      "author": "abc_22",
-      "content": "주변에 React 개발자 있나요",
-      "createdAt": "2022-03-22"
-    },
-    {
-      "id": 23,
-      "profile_url": "https://picsum.photos/id/15/50/50",
-      "author": "abc_23",
-      "content": "하하하 호호호",
-      "createdAt": "2021-12-12"
     }
   ]
 }
