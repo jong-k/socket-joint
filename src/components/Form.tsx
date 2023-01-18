@@ -1,7 +1,8 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 
-function Form({ postdata }) {
+function Form({ postdata, onEditData, editComment }) {
+  const [onEdit, setOnEdit] = useState(false);
   const [formData, setFormData] = useState({
     id: 0,
     profile_url: "",
@@ -10,15 +11,20 @@ function Form({ postdata }) {
     createdAt: "",
   });
 
+  useEffect(() => {
+    if (onEditData.id) setOnEdit(true);
+    setFormData(onEditData);
+  }, [onEditData]);
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    console.log(formData);
   };
 
   const handleSubmit = () => {
-    postdata(formData);
+    if (!onEdit) postdata(formData);
+    if (onEdit) editComment(formData);
     setFormData({
       id: 0,
       profile_url: "",
@@ -35,6 +41,7 @@ function Form({ postdata }) {
           type="text"
           name="profile_url"
           placeholder="https://picsum.photos/id/1/50/50"
+          value={formData.profile_url}
           onChange={handleChange}
           required
         />
@@ -43,12 +50,14 @@ function Form({ postdata }) {
           type="text"
           name="author"
           placeholder="작성자"
+          value={formData.author}
           onChange={handleChange}
         />
         <br />
         <textarea
           name="content"
           placeholder="내용"
+          value={formData.content}
           onChange={handleChange}
           required
         ></textarea>
@@ -57,12 +66,13 @@ function Form({ postdata }) {
           type="text"
           name="createdAt"
           placeholder="2020-05-30"
+          value={formData.createdAt}
           onChange={handleChange}
           required
         />
         <br />
         <button onClick={handleSubmit} type="submit">
-          등록
+          {onEdit ? "수정" : "등록"}
         </button>
       </form>
     </FormStyle>

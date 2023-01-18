@@ -1,6 +1,12 @@
 import styled from "styled-components";
 
-function CommentList({ isLoading, data, error, removeComment }) {
+function CommentList({
+  isLoading,
+  data,
+  error,
+  fetchOneComment,
+  removeComment,
+}) {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error on fetching data...</div>;
 
@@ -13,7 +19,7 @@ function CommentList({ isLoading, data, error, removeComment }) {
       <Button>
         <a
           onClick={() => {
-            console.log(comment);
+            fetchOneComment(comment);
           }}
         >
           수정

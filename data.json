@@ -2,9 +2,9 @@
   "comments": [
     {
       "id": 1,
-      "profile_url": "https://picsum.photos/id/1/50/50",
-      "author": "abc_1",
-      "content": "UI 테스트는 어떻게 진행하나요",
+      "profile_url": "https://picsum.photos/id/3/50/50",
+      "author": "new_abc_1",
+      "content": "new_UI 테스트는 어떻게 진행하나요",
       "createdAt": "2022-03-01"
     },
     {
@@ -90,62 +90,6 @@
       "author": "abc_13",
       "content": "주변에 React 개발자 있나요",
       "createdAt": "2022-03-13"
-    },
-    {
-      "id": 14,
-      "profile_url": "https://picsum.photos/id/14/50/50",
-      "author": "abc_14",
-      "content": "Next.js 가이드 주세요.14",
-      "createdAt": "2022-03-14"
-    },
-    {
-      "id": 15,
-      "profile_url": "https://picsum.photos/id/15/50/50",
-      "author": "abc_15",
-      "content": "vue vs react 뭐가 좋나요.",
-      "createdAt": "2022-03-15"
-    },
-    {
-      "id": 16,
-      "profile_url": "https://picsum.photos/id/16/50/50",
-      "author": "abc_16",
-      "content": "Atomic 디자인은 무엇인가요",
-      "createdAt": "2022-03-16"
-    },
-    {
-      "id": 17,
-      "profile_url": "https://picsum.photos/id/18/50/50",
-      "author": "abc_17",
-      "content": "UI 테스트는 어떻게 진행하나요",
-      "createdAt": "2022-03-17"
-    },
-    {
-      "id": 18,
-      "profile_url": "https://picsum.photos/id/18/50/50",
-      "author": "abc_18",
-      "content": "local storage는 언제 사용하는게 좋나요.",
-      "createdAt": "2022-03-18"
-    },
-    {
-      "id": 19,
-      "profile_url": "https://picsum.photos/id/19/50/50",
-      "author": "abc_19",
-      "content": "막히면 대답은 빨리 해주나요",
-      "createdAt": "2022-03-19"
-    },
-    {
-      "id": 20,
-      "profile_url": "https://picsum.photos/id/20/50/50",
-      "author": "abc_20",
-      "content": "Form 처리는 어떻게 하면 깔끔할까요",
-      "createdAt": "2022-03-20"
-    },
-    {
-      "id": 21,
-      "profile_url": "https://picsum.photos/id/21/50/50",
-      "author": "abc_21",
-      "content": "typescript도 배워 보려고 합니다. 어떻게 배우는게 빠를까요",
-      "createdAt": "2022-03-21"
     }
   ]
 }
