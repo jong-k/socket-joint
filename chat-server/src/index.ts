@@ -12,13 +12,14 @@ const PORT = 3000;
 app.use(router);
 
 io.on("connection", (socket) => {
-  socket.emit("INIT", "Welcome!");
-
-  socket.on("SEND_MESSAGE", (data) => {
-    console.log(data);
-    io.emit("RECEIVE_MESSAGE", data);
+  console.log("enter");
+  io.emit("enter", "Welcome everybody!");
+  socket.on("sendMessage", (message) => {
+    io.emit("receiveMessage", message);
+  });
+  socket.on("disconnect", () => {
+    console.log("exit");
   });
 });
 
-// eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
 server.listen(PORT, () => console.log(`Server has started on port ${PORT}`));
