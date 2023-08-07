@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Native Web Socket</title>
+  </head>
+  <body>
+    <script>
+      let ws = new WebSocket("ws://localhost:8000");
+      console.log(ws);
+      ws.onopen = (event) => {
+        console.log(event);
+        ws.send("클라이언트가 부릅니다");
+      };
+      ws.onmessage = (message) => {
+        console.log(message.data);
+      };
+    </script>
+  </body>
+</html>
