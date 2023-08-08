@@ -1,0 +1,26 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.container {
+  width: 60%;
+  background: #4f4f4f;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+  > div {
+    height: 80%;
+    background: #666;
+  }
+}
+
+.infoBox {
+  height: 80%;
+  background: #666;
+  color: #eee;
+}

@@ -1,25 +1,34 @@
-import { useEffect } from "react";
-import { io } from "socket.io-client";
-import { SERVER_URL } from "./enums";
+import { ChangeEvent, useState } from "react";
+import { Link } from "react-router-dom";
+import s from "./App.module.scss";
 
 export default function App() {
-  useEffect(() => {
-    const socket = io(SERVER_URL);
+  const [name, setName] = useState("untitled");
 
-    socket.on("connect", () => {
-      console.log(`클라이언트: 소켓 ${socket.id} 가 연결되었습니다.`);
-    });
-
-    socket.emit("msgFromClient", { data: "클라이언트: 서버 응답하라" });
-
-    socket.on("msgFromServer", (data) => {
-      console.log(data);
-    });
-  }, []);
+  const handleChangeNickname = (e: ChangeEvent<HTMLInputElement>) =>
+    setName(e.target.value);
 
   return (
-    <div>
-      <h2>Hello from App</h2>
+    <div className={s.wrapper}>
+      <div className={s.enterName}>
+        <h1 className={s.title}>hdx chat</h1>
+        <h2 className={s.status}>
+          현재 참여중인 사람: <span className={s.activeUserNum}>0</span> 명
+        </h2>
+        <div>
+          <input
+            className={s.nameInput}
+            placeholder="사용할 닉네임을 입력하세요"
+            type="text"
+            onChange={handleChangeNickname}
+          />
+        </div>
+        <Link to={`/chatroom?nickname=${name}`}>
+          <button className={s.button} type="button">
+            채팅 시작하기
+          </button>
+        </Link>
+      </div>
     </div>
   );
 }

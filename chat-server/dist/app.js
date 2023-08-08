@@ -15,10 +15,12 @@ const io = new socket_io_1.Server(expressServer, {
         origin: ALLOWED_ORIGINS,
     },
 });
+let activeUsers = [];
 io.on("connection", (socket) => {
-    console.log(`서버: 소켓 ${socket.id} 가 연결되었습니다.`);
-    socket.emit("msgFromServer", { data: "서버: 클라이언트 응답하라" });
-    socket.on("msgFromClient", (data) => {
-        console.log(data);
+    socket.on("enter", ({ name }) => {
+        console.log(`${name} 님이 접속하셨습니다.`);
+        activeUsers.push(name);
+        activeUsers = [...new Set(activeUsers)];
+        io.emit("activeUsers", activeUsers);
     });
 });
