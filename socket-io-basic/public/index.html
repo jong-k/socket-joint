@@ -16,7 +16,7 @@
     const socket = io("http://localhost:3000");
     // console.log(socket); // 소켓 객체
     socket.on("connect", () => {
-      // id 는 서버가 실행될 때마다 랜덤 문자열로 지정됨
+      // id 는 서버가 실행될 때마다 20자의 랜덤 문자열로 지정됨
       console.log(socket.id);
       socket.on("msgFromServer", (data) => {
         console.log(data);
@@ -24,8 +24,6 @@
       // socket.emit("msgFromClient", { data: "클라이언트: 서버 응답하라" });
       socket.emit("msgFromClient", "클라이언트: 서버 응답하라");
     });
-
-
   </script>
 </body>
 </html>
