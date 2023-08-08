@@ -1,7 +1,7 @@
 {
   "name": "socket-io-basic",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "dist/app.js",
   "license": "MIT",
   "scripts": {
     "start": "npx tsc && node dist/app.js"
