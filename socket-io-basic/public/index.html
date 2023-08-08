@@ -1,29 +1,31 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-</head>
-<body>
-  <!-- socket.io.js 는 socket.io 서버에 의해서 추가됨 -->
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    // socket.io.js 는 io 객체를 전역 스코프에 추가
-    // console.log(io); // 어떤 함수
-    const socket = io("http://localhost:3000");
-    // console.log(socket); // 소켓 객체
-    socket.on("connect", () => {
-      // id 는 서버가 실행될 때마다 20자의 랜덤 문자열로 지정됨
-      console.log(socket.id);
-      socket.on("msgFromServer", (data) => {
-        console.log(data);
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- socket.io.js 는 socket.io 서버에 의해서 추가됨 -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      // socket.io.js 는 io 객체를 전역 스코프에 추가
+      // console.log(io); // 어떤 함수
+      const socket = io("http://localhost:3000"); // http 대신 ws 를 넣어도 됨
+      // console.log(socket); // 소켓 객체
+      socket.on("connect", () => {
+        // id 는 서버가 실행될 때마다 20자의 랜덤 문자열로 지정됨
+        console.log(socket.id);
+        socket.on("msgFromServer", (data) => {
+          console.log(data);
+        });
+        // socket.emit("msgFromClient", { data: "클라이언트: 서버 응답하라" });
+        socket.emit("msgFromClient", "클라이언트: 서버 응답하라");
       });
-      // socket.emit("msgFromClient", { data: "클라이언트: 서버 응답하라" });
-      socket.emit("msgFromClient", "클라이언트: 서버 응답하라");
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>
