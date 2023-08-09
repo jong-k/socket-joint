@@ -1,12 +1,18 @@
-import { ChangeEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import s from "./App.module.scss";
 
 export default function App() {
   const [name, setName] = useState("untitled");
+  const navigate = useNavigate();
 
-  const handleChangeNickname = (e: ChangeEvent<HTMLInputElement>) =>
+  const handleChangeName = (e: ChangeEvent<HTMLInputElement>) =>
     setName(e.target.value);
+
+  const handleSubmitName = (e: FormEvent) => {
+    e.preventDefault();
+    navigate(`/chatroom?nickname=${name}`);
+  };
 
   return (
     <div className={s.wrapper}>
@@ -15,19 +21,18 @@ export default function App() {
         <h2 className={s.status}>
           현재 참여중인 사람: <span className={s.activeUserNum}>0</span> 명
         </h2>
-        <div>
+        <form onSubmit={handleSubmitName}>
           <input
             className={s.nameInput}
             placeholder="사용할 닉네임을 입력하세요"
             type="text"
-            onChange={handleChangeNickname}
+            name="name"
+            onChange={handleChangeName}
           />
-        </div>
-        <Link to={`/chatroom?nickname=${name}`}>
-          <button className={s.button} type="button">
+          <button className={s.button} type="submit">
             채팅 시작하기
           </button>
-        </Link>
+        </form>
       </div>
     </div>
   );
