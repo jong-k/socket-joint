@@ -17,10 +17,33 @@ const io = new Server(expressServer, {
 let activeUsers: string[] = [];
 
 io.on("connection", (socket) => {
-  socket.on("enter", ({ name }: { name: string }) => {
-    console.log(`${name} 님이 접속하셨습니다.`);
-    activeUsers.push(name);
-    activeUsers = [...new Set(activeUsers)];
-    io.emit("activeUsers", activeUsers);
+  // 현재 접속자 수
+  io.emit("activeUserNum", activeUsers.length);
+
+  socket.on("enter", (name: string) => {
+    if (!activeUsers.includes(name)) {
+      console.log(`${name} 님이 채팅을 시작했습니다.`);
+      activeUsers.push(name);
+    }
+    io.emit("activeUsers", JSON.stringify(activeUsers));
   });
+
+  socket.on("leave", (name: string) => {
+    if (activeUsers.includes(name)) {
+      console.log(`${name} 님이 채팅을 종료했습니다.`);
+      const newActiveUsers = activeUsers.filter((user) => user !== name);
+      activeUsers = newActiveUsers;
+      io.emit("activeUsers", JSON.stringify(activeUsers));
+    }
+  });
+
+  // socket.on("leave", (data: string) => {
+  //   const leavedUser = JSON.parse(data) as ActiveUser;
+  //   console.log(`${leavedUser.name} 님이 채팅을 종료하셨습니다`);
+  //   const newActiveUsers = activeUsers.filter(
+  //     (activeUser) => activeUser.id !== leavedUser.id,
+  //   );
+  //   activeUsers = newActiveUsers;
+  //   io.emit("activeUsers", JSON.stringify(activeUsers));
+  // });
 });
