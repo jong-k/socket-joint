@@ -1,10 +1,11 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { socket } from "./socket";
+import { socket, queryJoinedUser } from "./socket";
 import s from "./App.module.scss";
 
 export default function App() {
-  const [name, setName] = useState("untitled");
+  const [isJoined, setIsJoined] = useState(false);
+  const [name, setName] = useState("");
   const [activeUserNum, setActiveUserNum] = useState(0);
   const navigate = useNavigate();
 
@@ -13,23 +14,33 @@ export default function App() {
 
   const handleSubmitName = (e: FormEvent) => {
     e.preventDefault();
-    navigate(`/chatroom?name=${name}`);
+    queryJoinedUser(name, () => setIsJoined);
+    if (isJoined) {
+      window.alert("이미 사용중인 이름입니다.");
+    }
+    // 상태가 여기서 바ㄱ뀌는구나!
   };
 
-  useEffect(() => {
-    const onConnect = () => {
-      console.log("소켓이 연결되었습니다.");
-      socket.on("activeUserNum", (data: string) =>
-        setActiveUserNum(JSON.parse(data)),
-      );
-    };
+  // useEffect(() => {
+  //   const onConnect = () => {};
 
-    socket.on("connect", onConnect);
+  //   // const onActiveUserNum = (data: string) => {
+  //   //   const newActiveUserNum = JSON.parse(data);
+  //   //   setActiveUserNum(newActiveUserNum);
+  //   // };
 
-    return () => {
-      socket.off("connect", onConnect);
-    };
-  }, []);
+  //   socket.on("connect", onConnect);
+  //   // socket.on("activeUserNum", onActiveUserNum);
+
+  //   return () => {
+  //     socket.off("connect", onConnect);
+  //     // socket.off("activeUserNum", onActiveUserNum);
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   setActiveUserNum(activeUserNum);
+  // }, [activeUserNum]);
 
   return (
     <div className={s.wrapper}>
@@ -45,6 +56,7 @@ export default function App() {
             placeholder="사용할 닉네임을 입력하세요"
             type="text"
             name="name"
+            value={name}
             onChange={handleChangeName}
           />
           <button className={s.button} type="submit">

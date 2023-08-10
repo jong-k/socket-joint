@@ -16,31 +16,40 @@ const io = new socket_io_1.Server(expressServer, {
     },
 });
 let activeUsers = [];
+// const messages: Message[] = [];
 io.on("connection", (socket) => {
-    // 현재 접속자 수
-    io.emit("activeUserNum", activeUsers.length);
+    // socket.emit("activeUserNum", activeUsers.length);
+    // socket.emit("activeUsers", activeUsers);
+    // socket.emit("messageFromServer", messages);
     socket.on("enter", (name) => {
         if (!activeUsers.includes(name)) {
-            console.log(`${name} 님이 채팅을 시작했습니다.`);
-            activeUsers.push(name);
-        }
-        io.emit("activeUsers", JSON.stringify(activeUsers));
-    });
-    socket.on("leave", (name) => {
-        if (activeUsers.includes(name)) {
-            console.log(`${name} 님이 채팅을 종료했습니다.`);
-            const newActiveUsers = activeUsers.filter((user) => user !== name);
+            const newActiveUsers = [name, ...activeUsers];
             activeUsers = newActiveUsers;
-            io.emit("activeUsers", JSON.stringify(activeUsers));
         }
+        io.emit("activeUsers", activeUsers);
+        io.emit("activeUserNum", activeUsers.length);
     });
-    // socket.on("leave", (data: string) => {
-    //   const leavedUser = JSON.parse(data) as ActiveUser;
-    //   console.log(`${leavedUser.name} 님이 채팅을 종료하셨습니다`);
-    //   const newActiveUsers = activeUsers.filter(
-    //     (activeUser) => activeUser.id !== leavedUser.id,
-    //   );
-    //   activeUsers = newActiveUsers;
-    //   io.emit("activeUsers", JSON.stringify(activeUsers));
+    // 현재 접속중인 유저 업데이트
+    socket.on("queryActiveUsers", () => {
+        io.emit("activeUsers", activeUsers);
+    });
+    socket.on("queryJoinedUser", (data) => {
+        socket.emit("isJoined", activeUsers.includes(data));
+    });
+    // socket.on("leave", (name: string) => {
+    //   if (activeUsers.includes(name)) {
+    //     console.log(`${name} 님이 채팅을 종료했습니다.`);
+    //     const newActiveUsers = activeUsers.filter(
+    //       (username) => username !== name,
+    //     );
+    //     activeUsers = newActiveUsers;
+    //     io.emit("activeUsers", activeUsers);
+    //     io.emit("activeUserNum", activeUsers.length);
+    //   }
+    // });
+    // socket.on("messageFromClient", (data) => {
+    //   const messageObj = data;
+    //   messages.push(messageObj);
+    //   io.emit("messageFromServer", messages);
     // });
 });
