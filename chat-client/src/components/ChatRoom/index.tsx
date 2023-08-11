@@ -1,6 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { socket } from "../../socket";
+import CanvasArea from "../CanvasArea";
 import s from "./index.module.scss";
 
 export default function ChatRoom() {
@@ -43,59 +44,62 @@ export default function ChatRoom() {
   }, [activeUsers]);
 
   return (
-    <div className={s.wrapper}>
-      <div className={s.container}>
-        <div className={s.main}>
-          <div className={s.chat}>
-            <div>
-              {messages.map((message, idx) =>
-                message.author === name ? (
-                  <div key={idx} className={s.messageContainer}>
-                    <p className={s.author}>{message.author} (나):</p>
-                    <p className={s.message}>{message.content}</p>
-                  </div>
-                ) : (
-                  <div key={idx} className={s.messageContainer}>
-                    <p className={s.author}>{message.author}:</p>
-                    <p className={s.message}>{message.content}</p>
-                  </div>
-                ),
-              )}
+    <>
+      <CanvasArea />
+      <div className={s.wrapper}>
+        <div className={s.container}>
+          <div className={s.main}>
+            <div className={s.chat}>
+              <div>
+                {messages.map((message, idx) =>
+                  message.author === name ? (
+                    <div key={idx} className={s.messageContainer}>
+                      <p className={s.author}>{message.author} (나):</p>
+                      <p className={s.message}>{message.content}</p>
+                    </div>
+                  ) : (
+                    <div key={idx} className={s.messageContainer}>
+                      <p className={s.author}>{message.author}:</p>
+                      <p className={s.message}>{message.content}</p>
+                    </div>
+                  ),
+                )}
+              </div>
+              <form onSubmit={handleSubmitMessage}>
+                <input
+                  type="text"
+                  value={message}
+                  placeholder="메시지를 입력하세요"
+                  onChange={handleChangeMessage}
+                />
+                <button type="submit">전송</button>
+              </form>
             </div>
-            <form onSubmit={handleSubmitMessage}>
-              <input
-                type="text"
-                value={message}
-                placeholder="메시지를 입력하세요"
-                onChange={handleChangeMessage}
-              />
-              <button type="submit">전송</button>
-            </form>
-          </div>
-          <div className={s.userList}>
-            <h2>현재 참여중인 사람</h2>
-            <div>
-              {activeUsers.map((user, idx) =>
-                user === name ? (
-                  <p key={idx}>{user} (나)</p>
-                ) : (
-                  <p key={idx}>{user}</p>
-                ),
-              )}
+            <div className={s.userList}>
+              <h2>현재 참여중인 사람</h2>
+              <div>
+                {activeUsers.map((user, idx) =>
+                  user === name ? (
+                    <p key={idx}>{user} (나)</p>
+                  ) : (
+                    <p key={idx}>{user}</p>
+                  ),
+                )}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className={s.leaveButtonBox}>
-          <button
-            type="button"
-            className={s.leaveButton}
-            onClick={handleClickLeave}
-          >
-            나가기
-          </button>
+          <div className={s.leaveButtonBox}>
+            <button
+              type="button"
+              className={s.leaveButton}
+              onClick={handleClickLeave}
+            >
+              나가기
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
