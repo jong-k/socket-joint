@@ -45,58 +45,67 @@ export default function ChatRoom() {
 
   return (
     <>
-      <CanvasArea />
+      <CanvasArea
+        currentMessage={
+          messages.length ? messages[messages.length - 1].content : "Hello"
+        }
+      />
       <div className={s.wrapper}>
         <div className={s.container}>
-          <div className={s.main}>
-            <div className={s.chat}>
-              <div>
-                {messages.map((message, idx) =>
-                  message.author === name ? (
-                    <div key={idx} className={s.messageContainer}>
-                      <p className={s.author}>{message.author} (나):</p>
-                      <p className={s.message}>{message.content}</p>
-                    </div>
-                  ) : (
-                    <div key={idx} className={s.messageContainer}>
-                      <p className={s.author}>{message.author}:</p>
-                      <p className={s.message}>{message.content}</p>
-                    </div>
-                  ),
-                )}
-              </div>
-              <form onSubmit={handleSubmitMessage}>
-                <input
-                  type="text"
-                  value={message}
-                  placeholder="메시지를 입력하세요"
-                  onChange={handleChangeMessage}
-                />
-                <button type="submit">전송</button>
-              </form>
+          <div className={s.chat}>
+            <div className={s.messageList}>
+              {messages.map((message, idx) =>
+                message.author === name ? (
+                  <div
+                    key={idx}
+                    className={s.messageContainer}
+                    style={{ background: "orange" }}
+                  >
+                    <p className={s.author}>{message.author} (나):</p>
+                    <p className={s.message}>{message.content}</p>
+                  </div>
+                ) : (
+                  <div key={idx} className={s.messageContainer}>
+                    <p className={s.author}>{message.author}:</p>
+                    <p className={s.message}>{message.content}</p>
+                  </div>
+                ),
+              )}
             </div>
-            <div className={s.userList}>
-              <h2>현재 참여중인 사람</h2>
-              <div>
-                {activeUsers.map((user, idx) =>
-                  user === name ? (
-                    <p key={idx}>{user} (나)</p>
-                  ) : (
-                    <p key={idx}>{user}</p>
-                  ),
-                )}
-              </div>
-            </div>
+            <form onSubmit={handleSubmitMessage}>
+              <input
+                type="text"
+                value={message}
+                placeholder="메시지를 입력하세요"
+                onChange={handleChangeMessage}
+              />
+              <button type="submit">전송</button>
+            </form>
           </div>
-
-          <div className={s.leaveButtonBox}>
-            <button
-              type="button"
-              className={s.leaveButton}
-              onClick={handleClickLeave}
-            >
-              나가기
-            </button>
+          <div className={s.rightBar}>
+            <h2>현재 접속자</h2>
+            <div className={s.userList}>
+              {activeUsers.map((user, idx) =>
+                user === name ? (
+                  <p key={idx}>
+                    {idx + 1}. {user} (나)
+                  </p>
+                ) : (
+                  <p key={idx}>
+                    {idx + 1}. {user}
+                  </p>
+                ),
+              )}
+            </div>
+            <div className={s.leaveButtonBox}>
+              <button
+                type="button"
+                className={s.leaveButton}
+                onClick={handleClickLeave}
+              >
+                나가기
+              </button>
+            </div>
           </div>
         </div>
       </div>

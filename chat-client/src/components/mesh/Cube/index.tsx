@@ -12,7 +12,7 @@ export default function Cube({ currentMessage }: CubeProps) {
   const textRef = useRef<any>();
   useFrame(
     (state) =>
-      (textRef.current.position.x = Math.sin(state.clock.elapsedTime) * 2),
+      (textRef.current.position.x = Math.sin(state.clock.elapsedTime) * 3),
   );
 
   return (
@@ -31,7 +31,7 @@ export default function Cube({ currentMessage }: CubeProps) {
           <directionalLight position={[10, 10, 5]} />
           {/* 한글 입력하면 깨짐.. */}
           <Text ref={textRef} fontSize={3} color="#444">
-            {currentMessage || "Hello"}
+            {currentMessage}
           </Text>
           <Dodecahedron />
         </RenderTexture>

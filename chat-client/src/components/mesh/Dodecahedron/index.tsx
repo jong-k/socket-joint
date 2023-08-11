@@ -1,6 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Mesh } from "three";
+import { socket } from "../../../socket";
 
 interface DodecahedronProps {
   position?: [number, number, number];
@@ -11,6 +12,11 @@ export default function Dodecahedron({ position, scale }: DodecahedronProps) {
   const meshRef = useRef<Mesh>(null!);
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+
+  useEffect(() => {
+    socket.emit("justHovered", isHovered);
+    socket.on("objectHovered", (data: boolean) => setIsHovered(data));
+  }, [isHovered]);
 
   // delta time 상관없이 회전 (프레임에 관련 없이)
   useFrame(() => (meshRef.current.rotation.x += 0.01));

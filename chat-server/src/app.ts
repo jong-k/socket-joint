@@ -16,6 +16,7 @@ const io = new Server(expressServer, {
 
 let activeUsers: string[] = [];
 const messages: Message[] = [];
+let objectHovered = false;
 
 io.on("connection", (socket) => {
   socket.emit("activeUsers", activeUsers);
@@ -43,5 +44,10 @@ io.on("connection", (socket) => {
   socket.on("addMessage", (message: Message) => {
     messages.push(message);
     io.emit("messages", messages);
+  });
+
+  socket.on("justHovered", (data: boolean) => {
+    objectHovered = data;
+    io.emit("objectHovered", objectHovered);
   });
 });
