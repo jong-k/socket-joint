@@ -26,6 +26,13 @@ export default function App() {
   };
 
   useEffect(() => {
+    socket.emit("queryActiveUsers");
+    socket.on("activeUsers", (data: string[]) => {
+      setActiveUsers(data);
+    });
+  }, [activeUsers]);
+
+  useEffect(() => {
     socket.on("activeUsers", (data: string[]) => {
       setActiveUsers(data);
     });

@@ -19,7 +19,9 @@ const messages: Message[] = [];
 let objectHovered = false;
 
 io.on("connection", (socket) => {
-  socket.emit("activeUsers", activeUsers);
+  socket.on("queryActiveUsers", () => {
+    socket.emit("activeUsers", activeUsers);
+  });
 
   socket.on("enter", (name: string) => {
     socket.emit("messages", messages);
