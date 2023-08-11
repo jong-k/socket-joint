@@ -1,46 +1,35 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { socket, queryJoinedUser } from "./socket";
+import { socket } from "./socket";
 import s from "./App.module.scss";
 
 export default function App() {
-  const [isJoined, setIsJoined] = useState(false);
+  const [activeUsers, setActiveUsers] = useState<string[]>([]);
   const [name, setName] = useState("");
-  const [activeUserNum, setActiveUserNum] = useState(0);
   const navigate = useNavigate();
 
-  const handleChangeName = (e: ChangeEvent<HTMLInputElement>) =>
+  const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
+  };
 
   const handleSubmitName = (e: FormEvent) => {
     e.preventDefault();
-    queryJoinedUser(name, () => setIsJoined);
-    if (isJoined) {
-      window.alert("이미 사용중인 이름입니다.");
+    if (!name.trim()) {
+      window.alert("공백은 이름으로 사용할 수 없습니다.");
+      return;
     }
-    // 상태가 여기서 바ㄱ뀌는구나!
+    if (activeUsers.includes(name)) {
+      window.alert("이미 사용중인 이름입니다.");
+      return;
+    }
+    navigate(`/chatroom?name=${name}`);
   };
 
-  // useEffect(() => {
-  //   const onConnect = () => {};
-
-  //   // const onActiveUserNum = (data: string) => {
-  //   //   const newActiveUserNum = JSON.parse(data);
-  //   //   setActiveUserNum(newActiveUserNum);
-  //   // };
-
-  //   socket.on("connect", onConnect);
-  //   // socket.on("activeUserNum", onActiveUserNum);
-
-  //   return () => {
-  //     socket.off("connect", onConnect);
-  //     // socket.off("activeUserNum", onActiveUserNum);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   setActiveUserNum(activeUserNum);
-  // }, [activeUserNum]);
+  useEffect(() => {
+    socket.on("activeUsers", (data: string[]) => {
+      setActiveUsers(data);
+    });
+  }, [name]);
 
   return (
     <div className={s.wrapper}>
@@ -48,7 +37,7 @@ export default function App() {
         <h1 className={s.title}>hdx chat</h1>
         <h2 className={s.status}>
           현재 접속자 수:{" "}
-          <span className={s.activeUserNum}>{activeUserNum}</span> 명
+          <span className={s.activeUserNum}>{activeUsers.length}</span> 명
         </h2>
         <form onSubmit={handleSubmitName}>
           <input

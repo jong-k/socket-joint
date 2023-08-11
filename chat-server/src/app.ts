@@ -14,10 +14,12 @@ const io = new Server(expressServer, {
   },
 });
 
-let activeUsers: string[] = [];
+let activeUsers: string[] = ["admin"];
 // const messages: Message[] = [];
 
 io.on("connection", (socket) => {
+  socket.emit("activeUsers", activeUsers);
+
   // socket.emit("activeUserNum", activeUsers.length);
   // socket.emit("activeUsers", activeUsers);
   // socket.emit("messageFromServer", messages);
@@ -29,16 +31,6 @@ io.on("connection", (socket) => {
     }
 
     io.emit("activeUsers", activeUsers);
-    io.emit("activeUserNum", activeUsers.length);
-  });
-
-  // 현재 접속중인 유저 업데이트
-  socket.on("queryActiveUsers", () => {
-    io.emit("activeUsers", activeUsers);
-  });
-
-  socket.on("queryJoinedUser", (data: string) => {
-    socket.emit("isJoined", activeUsers.includes(data));
   });
 
   // socket.on("leave", (name: string) => {
