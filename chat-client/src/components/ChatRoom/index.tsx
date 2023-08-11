@@ -8,7 +8,7 @@ export default function ChatRoom() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState("");
   const location = useLocation();
-  const name = location.search.split("?name=")[1];
+  const name = decodeURI(location.search.split("?name=")[1]);
   const navigate = useNavigate();
 
   const handleChangeMessage = (e: ChangeEvent<HTMLInputElement>) =>
@@ -19,8 +19,8 @@ export default function ChatRoom() {
     const newMessage = { author: name, content: message };
     socket.emit("addMessage", newMessage, () => {
       setMessages((prev) => [...prev, newMessage]);
-      setMessage("");
     });
+    setMessage("");
   };
 
   const handleClickLeave = () => {
