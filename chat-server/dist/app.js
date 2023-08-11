@@ -16,10 +16,11 @@ const io = new socket_io_1.Server(expressServer, {
     },
 });
 let activeUsers = [];
-// const messages: Message[] = [];
+const messages = [];
 io.on("connection", (socket) => {
     socket.emit("activeUsers", activeUsers);
     socket.on("enter", (name) => {
+        socket.emit("messages", messages);
         if (!activeUsers.includes(name)) {
             const newActiveUsers = [...activeUsers, name];
             activeUsers = newActiveUsers;
@@ -33,6 +34,10 @@ io.on("connection", (socket) => {
         }
         // sender 이외 전체에 event 발신
         socket.broadcast.emit("activeUsers", activeUsers);
+    });
+    socket.on("addMessage", (message) => {
+        messages.push(message);
+        io.emit("messages", messages);
     });
     // socket.on("messageFromClient", (data) => {
     //   const messageObj = data;

@@ -15,12 +15,13 @@ const io = new Server(expressServer, {
 });
 
 let activeUsers: string[] = [];
-// const messages: Message[] = [];
+const messages: Message[] = [];
 
 io.on("connection", (socket) => {
   socket.emit("activeUsers", activeUsers);
 
   socket.on("enter", (name: string) => {
+    socket.emit("messages", messages);
     if (!activeUsers.includes(name)) {
       const newActiveUsers = [...activeUsers, name];
       activeUsers = newActiveUsers;
@@ -39,9 +40,8 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("activeUsers", activeUsers);
   });
 
-  // socket.on("messageFromClient", (data) => {
-  //   const messageObj = data;
-  //   messages.push(messageObj);
-  //   io.emit("messageFromServer", messages);
-  // });
+  socket.on("addMessage", (message: Message) => {
+    messages.push(message);
+    io.emit("messages", messages);
+  });
 });
