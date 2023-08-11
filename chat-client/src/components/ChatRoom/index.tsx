@@ -1,92 +1,28 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { socket, queryActiveUsers } from "../../socket";
+import { socket } from "../../socket";
 import s from "./index.module.scss";
 
 export default function ChatRoom() {
+  const [activeUsers, setActiveUsers] = useState<string[]>([]);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
-  const [activeUsers, setActiveUsers] = useState<string[]>([]);
   const location = useLocation();
-  // const navigate = useNavigate();
   const name = location.search.split("?name=")[1];
+  // const navigate = useNavigate();
 
   const handleChangeMessage = (e: ChangeEvent<HTMLInputElement>) =>
     setMessage(e.target.value);
 
-  // const submitMessage = (e: FormEvent) => {
-  //   e.preventDefault();
-  //   const newMessage = { name, content: message };
-  //   setMessages((prev) => [...prev, newMessage]);
-  //   socket.emit("messageFromClient", JSON.stringify(newMessage));
-  //   setMessage("");
-  // };
-
-  // const handleLeaveChatRoom = () => {
-  //   const newActiveUsers = activeUsers.filter((user) => user !== name);
-  //   setActiveUsers(newActiveUsers);
-  //   socket.emit("leave", name);
-  //   navigate("/", { replace: true });
-  // };
-
-  // const addActiveUser = (username: string) =>
-  //   setActiveUsers((prev) => [...prev, username]);
-
-  // const updateActiveUsers = () => {
-  //   socket.on("activeUsers", (data: string[]) => {
-  //     setActiveUsers(data);
-  //   });
-  // };
-
-  // const updateMessages = () => {
-  //   socket.on("message");
-  // };
-
   useEffect(() => {
-    setActiveUsers((prev) => [name, ...prev]);
-
-    socket.emit("enter", name);
-    queryActiveUsers(setActiveUsers);
-
-    // const onActiveUsers = (data: string[]) => {
-    //   const newActiveUsers = data as string[];
-    //   setActiveUsers(newActiveUsers);
-    // };
-
-    // const onMessageFromServer = (data: Message) => {
-    //   setMessages([...messages, data]);
-    // };
-
-    // socket.on("activeUsers", onActiveUsers);
-    // socket.on("messageFromServer", onMessageFromServer);
+    socket.emit("enter", name, () => setActiveUsers((prev) => [name, ...prev]));
   }, []);
 
-  // useEffect(() => {
-  //   // state update
-  //   // if (!activeUsers.includes(name)) {
-  //   //   setActiveUsers((prev) => [...prev, name]);
-  //   // }
-  //   const onActiveUsers = (data: string[]) => {
-  //     console.log("접속중인 유저 정보가 업데이트되었습니다.");
-  //     setActiveUsers(data);
-  //   };
-
-  //   socket.on("activeUsers", onActiveUsers);
-
-  //   return () => {
-  //     socket.off("activeUsers", onActiveUsers);
-  //   };
-  // }, [activeUsers.length]);
-
-  // useEffect(() => {
-  //   const onMessageFromServer = (data: Message[]) => setMessages(data);
-
-  //   socket.on("messageFromServer", onMessageFromServer);
-
-  //   return () => {
-  //     socket.off("messageFromServer", onMessageFromServer);
-  //   };
-  // }, [messages.length]);
+  useEffect(() => {
+    socket.on("activeUsers", (data: string[]) => {
+      setActiveUsers(data);
+    });
+  }, [activeUsers]);
 
   return (
     <div className={s.wrapper}>

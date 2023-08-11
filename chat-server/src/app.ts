@@ -14,22 +14,17 @@ const io = new Server(expressServer, {
   },
 });
 
-let activeUsers: string[] = ["admin"];
+let activeUsers: string[] = [];
 // const messages: Message[] = [];
 
 io.on("connection", (socket) => {
   socket.emit("activeUsers", activeUsers);
-
-  // socket.emit("activeUserNum", activeUsers.length);
-  // socket.emit("activeUsers", activeUsers);
-  // socket.emit("messageFromServer", messages);
 
   socket.on("enter", (name: string) => {
     if (!activeUsers.includes(name)) {
       const newActiveUsers = [name, ...activeUsers];
       activeUsers = newActiveUsers;
     }
-
     io.emit("activeUsers", activeUsers);
   });
 

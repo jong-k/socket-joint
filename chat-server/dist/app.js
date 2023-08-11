@@ -19,15 +19,11 @@ let activeUsers = ["admin"];
 // const messages: Message[] = [];
 io.on("connection", (socket) => {
     socket.emit("activeUsers", activeUsers);
-    // socket.emit("activeUserNum", activeUsers.length);
-    // socket.emit("activeUsers", activeUsers);
-    // socket.emit("messageFromServer", messages);
     socket.on("enter", (name) => {
         if (!activeUsers.includes(name)) {
             const newActiveUsers = [name, ...activeUsers];
             activeUsers = newActiveUsers;
         }
-        console.log(activeUsers);
         io.emit("activeUsers", activeUsers);
     });
     // socket.on("leave", (name: string) => {
