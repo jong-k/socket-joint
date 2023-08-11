@@ -29,8 +29,12 @@ export default function Cube({ currentMessage }: CubeProps) {
           <color attach="background" args={["#00cee0"]} />
           <ambientLight intensity={0.5} />
           <directionalLight position={[10, 10, 5]} />
-          {/* 한글 입력하면 깨짐.. */}
-          <Text ref={textRef} fontSize={3} color="#444">
+          <Text
+            ref={textRef}
+            fontSize={3}
+            color="#444"
+            font="public/Pretendard-Regular.otf"
+          >
             {currentMessage}
           </Text>
           <Dodecahedron />
