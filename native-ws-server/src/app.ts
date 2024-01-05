@@ -18,7 +18,7 @@ wss.on("connection", (ws) => {
     console.error(err);
   });
 
-  ws.send("Hello from server!");
+  ws.send("Hello from WebSocket server!");
   // 문자열로 바꾸기 전에는 Buffer 형태
   // ws.on("message", (data) => console.log(data.toString()));
 });

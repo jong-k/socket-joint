@@ -1,17 +1,9 @@
-import { useEffect } from "react";
-import EchoRoom from "./EchoRoom";
-import { socket } from "./socket";
+import ChatRoom from "./components/ChatRoom";
 
 export default function App() {
-  useEffect(() => {
-    socket.onopen = () => {
-      console.log("server connected");
-    };
-  }, []);
-
   return (
-    <div>
-      <EchoRoom />
+    <div className="w-screen h-screen bg-slate-800">
+      <ChatRoom />
     </div>
   );
 }
