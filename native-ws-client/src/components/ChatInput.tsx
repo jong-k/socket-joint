@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Message } from "./ChatRoom";
+import { socket } from "../hooks/useWebSocket";
 
 interface ChatInputProps {
   currentNickname: string;
@@ -26,6 +27,8 @@ export default function ChatInput({
             author: currentNickname,
             content: chatText,
           };
+          // 서버로 메시지 전송
+          socket.send(JSON.stringify(newMessage));
           setMessages((prev) => [...prev, newMessage]);
           setChatText("");
         }}

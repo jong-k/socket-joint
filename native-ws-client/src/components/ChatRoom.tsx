@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useWebSocket } from "../hooks/useWebSocket";
 import ChatMessage from "./ChatMessage";
-
 import ChatInput from "./ChatInput";
 
 export interface Nickname {
@@ -21,6 +21,11 @@ const SAMPLE_NICKNAME: Nickname = {
 export default function ChatRoom() {
   const [nickname, setNickname] = useState<Nickname>(SAMPLE_NICKNAME);
   const [messages, setMessages] = useState<Message[]>([]);
+  const { initWebSocket } = useWebSocket();
+
+  useEffect(() => {
+    initWebSocket();
+  }, []);
 
   return (
     <div className="w-[30rem] h-[80rem] flex justify-center items-center flex-col">
@@ -44,12 +49,13 @@ export default function ChatRoom() {
           결정
         </button>
       </div>
-
+      {/* 채팅 메시지 박스 */}
       <div className="p-2 w-full h-full bg-slate-600">
         {messages.map((message, idx) => {
           return <ChatMessage key={idx} message={message} />;
         })}
       </div>
+
       <ChatInput currentNickname={nickname.current} setMessages={setMessages} />
     </div>
   );
