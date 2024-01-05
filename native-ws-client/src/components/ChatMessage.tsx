@@ -1,14 +1,14 @@
-import type { Message } from "./ChatRoom";
+import type { ChatMessageData } from "../types";
 
 interface ChatMessageProps {
-  message: Message;
+  chatMessage: ChatMessageData;
 }
 
-export default function ChatMessage({ message }: ChatMessageProps) {
+export default function ChatMessage({ chatMessage }: ChatMessageProps) {
   return (
     <div className="text-white">
-      <p>{message.author}</p>
-      <p>{message.content}</p>
+      <p>{chatMessage.caller}</p>
+      <p>{chatMessage.content}</p>
     </div>
   );
 }

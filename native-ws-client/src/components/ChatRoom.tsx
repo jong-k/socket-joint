@@ -2,16 +2,7 @@ import { useState, useEffect } from "react";
 import { useWebSocket } from "../hooks/useWebSocket";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
-
-export interface Nickname {
-  current: string;
-  new: string;
-}
-
-export interface Message {
-  author: string;
-  content: string;
-}
+import type { Nickname, ChatMessageData } from "../types";
 
 const SAMPLE_NICKNAME: Nickname = {
   current: "익명",
@@ -20,11 +11,14 @@ const SAMPLE_NICKNAME: Nickname = {
 
 export default function ChatRoom() {
   const [nickname, setNickname] = useState<Nickname>(SAMPLE_NICKNAME);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const { initWebSocket } = useWebSocket();
+  const [chatMessages, setChatMessages] = useState<ChatMessageData[]>([]);
+  const { initWebSocket } = useWebSocket(setChatMessages);
 
   useEffect(() => {
     initWebSocket();
+
+    // getAllChatMessages({ type: "allMessages" });
+    // initWebSocket 함수에서 onmessage 이벤트 핸들러를 등록했기 때문에 콘솔에 출력되는지만 확인해보자
   }, []);
 
   return (
@@ -51,12 +45,15 @@ export default function ChatRoom() {
       </div>
       {/* 채팅 메시지 박스 */}
       <div className="p-2 w-full h-full bg-slate-600">
-        {messages.map((message, idx) => {
-          return <ChatMessage key={idx} message={message} />;
+        {chatMessages.map((chatMessage, idx) => {
+          return <ChatMessage key={idx} chatMessage={chatMessage} />;
         })}
       </div>
 
-      <ChatInput currentNickname={nickname.current} setMessages={setMessages} />
+      <ChatInput
+        currentNickname={nickname.current}
+        setMessages={setChatMessages}
+      />
     </div>
   );
 }

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import type { Message } from "./ChatRoom";
+import type { ChatMessageData } from "../types";
 import { socket } from "../hooks/useWebSocket";
 
 interface ChatInputProps {
   currentNickname: string;
-  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessageData[]>>;
 }
 
 export default function ChatInput({
@@ -24,9 +24,10 @@ export default function ChatInput({
       <button
         onClick={() => {
           const newMessage = {
-            author: currentNickname,
+            type: "chat",
+            caller: currentNickname,
             content: chatText,
-          };
+          } as ChatMessageData;
           // 서버로 메시지 전송
           socket.send(JSON.stringify(newMessage));
           setMessages((prev) => [...prev, newMessage]);

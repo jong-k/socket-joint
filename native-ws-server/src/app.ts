@@ -1,8 +1,14 @@
 import express from "express";
-import { WebSocketServer } from "ws";
+import WebSocket, { WebSocketServer } from "ws";
+
+type MessageTypes = "chat" | "allMessages";
 
 interface Message {
-  author: string;
+  type: MessageTypes;
+}
+
+interface ChatMessage extends Message {
+  caller: string;
   content: string;
 }
 
@@ -15,7 +21,23 @@ const wss = new WebSocketServer({
 });
 
 let authenticated = false;
-const messages: Message[] = [];
+const chatMessages: ChatMessage[] = [
+  {
+    type: "chat",
+    caller: "손흥민",
+    content: "1골",
+  },
+  {
+    type: "chat",
+    caller: "황희찬",
+    content: "2골",
+  },
+  {
+    type: "chat",
+    caller: "이강인",
+    content: "3골",
+  },
+];
 
 wss.on("headers", (headers) => {
   console.log(headers);
@@ -26,8 +48,24 @@ wss.on("connection", (ws) => {
     if (authenticated) {
       const rawData = data.toString();
       const message = JSON.parse(rawData) as Message;
-      messages.push(message);
-      console.log("클라:" + rawData);
+
+      if (message.type === "chat") {
+        chatMessages.push(message as ChatMessage);
+        console.log("클라:" + rawData);
+        // 자기 자신을 제외하고 보내기
+        wss.clients.forEach((client) => {
+          if (client !== ws && client.readyState === WebSocket.OPEN) {
+            client.send(rawData);
+          }
+        });
+      }
+      if (message.type === "allMessages") {
+        const data = {
+          type: "allMessages",
+          data: chatMessages,
+        };
+        ws.send(JSON.stringify(data));
+      }
     } else {
       const token = data.toString().split(" ")[1];
       // 토큰이 맞지 않으면 연결 끊기
