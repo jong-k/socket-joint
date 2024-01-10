@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useWebSocket } from "../hooks/useWebSocket";
-import ChatMessage from "./ChatMessage";
+import Chat from "./Chat";
 import ChatInput from "./ChatInput";
-import type { Nickname, ChatMessageData } from "../types";
+import type { Nickname, ChatMessage } from "../types";
 
 const SAMPLE_NICKNAME: Nickname = {
   current: "익명",
@@ -10,16 +10,22 @@ const SAMPLE_NICKNAME: Nickname = {
 };
 
 export default function ChatRoom() {
+  const socketRef = useRef<WebSocket | null>(null);
   const [nickname, setNickname] = useState<Nickname>(SAMPLE_NICKNAME);
-  const [chatMessages, setChatMessages] = useState<ChatMessageData[]>([]);
-  const { initWebSocket } = useWebSocket(setChatMessages);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const { socketState, initWebSocket } = useWebSocket(setChatMessages);
 
   useEffect(() => {
-    initWebSocket();
+    initWebSocket(socketRef);
 
     // getAllChatMessages({ type: "allMessages" });
     // initWebSocket 함수에서 onmessage 이벤트 핸들러를 등록했기 때문에 콘솔에 출력되는지만 확인해보자
   }, []);
+
+  useEffect(() => {
+    // 왜 두번 치냐 => strict mode 끄면 해결됨
+    console.log("소켓 라이프사이클 확인:", socketState, socketRef.current);
+  }, [socketState]);
 
   return (
     <div className="w-[30rem] h-[80rem] flex justify-center items-center flex-col">
@@ -46,11 +52,12 @@ export default function ChatRoom() {
       {/* 채팅 메시지 박스 */}
       <div className="p-2 w-full h-full bg-slate-600">
         {chatMessages.map((chatMessage, idx) => {
-          return <ChatMessage key={idx} chatMessage={chatMessage} />;
+          return <Chat key={idx} chatMessage={chatMessage} />;
         })}
       </div>
 
       <ChatInput
+        socketRef={socketRef}
         currentNickname={nickname.current}
         setMessages={setChatMessages}
       />

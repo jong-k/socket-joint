@@ -1,13 +1,14 @@
 import { useState } from "react";
-import type { ChatMessageData } from "../types";
-import { socket } from "../hooks/useWebSocket";
+import type { ChatMessage } from "../types";
 
 interface ChatInputProps {
+  socketRef: React.MutableRefObject<WebSocket | null>;
   currentNickname: string;
-  setMessages: React.Dispatch<React.SetStateAction<ChatMessageData[]>>;
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
 }
 
 export default function ChatInput({
+  socketRef,
   currentNickname,
   setMessages,
 }: ChatInputProps) {
@@ -23,11 +24,13 @@ export default function ChatInput({
       />
       <button
         onClick={() => {
+          const socket = socketRef.current;
+          if (socket === null) return;
           const newMessage = {
             type: "chat",
-            caller: currentNickname,
+            author: currentNickname,
             content: chatText,
-          } as ChatMessageData;
+          } as ChatMessage;
           // 서버로 메시지 전송
           socket.send(JSON.stringify(newMessage));
           setMessages((prev) => [...prev, newMessage]);
