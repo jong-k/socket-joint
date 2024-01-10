@@ -24,7 +24,10 @@ export default function ChatRoom() {
 
   useEffect(() => {
     // 왜 두번 치냐 => strict mode 끄면 해결됨
-    console.log("소켓 라이프사이클 확인:", socketState, socketRef.current);
+    // console.log("소켓 라이프사이클 확인:", socketState, socketRef.current);
+    if (socketState === "closed") {
+      initWebSocket(socketRef);
+    }
   }, [socketState]);
 
   return (

@@ -8,14 +8,11 @@ export function useWebSocket(
   setChatMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>,
 ) {
   // TODO: socket state 로 바꾸기
-  const [socketState, setSocketState] = useState<SocketState>("closed");
+  const [socketState, setSocketState] = useState<SocketState | null>(null);
   const initWebSocket = (
     socketRef: React.MutableRefObject<WebSocket | null>,
   ) => {
     setSocketState("connecting");
-    // 이미 웹소켓이 연결되어 있다면 함수를 종료
-    if (socketRef.current) return;
-    console.log("소켓 오픈 테스트:");
     // 웹소켓 생성
     socketRef.current = new WebSocket(SERVER_URL);
     const socket = socketRef.current;
